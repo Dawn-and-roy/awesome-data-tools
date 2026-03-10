@@ -1,0 +1,21 @@
+#统计某文件夹下所有pkl文件的数量
+import os
+from glob import glob
+
+pkl_dir = '/workspace/per2-dataset/per2_dataset/3r7v/virtual_camera/eu_dyo_data_origin_260309/pkl'
+
+pkl_files = sorted(glob(os.path.join(pkl_dir, '**', '*.pkl'), recursive=True))
+
+print(f"目录: {pkl_dir}")
+print(f"共找到 {len(pkl_files)} 个 .pkl 文件\n")
+
+for i, f in enumerate(pkl_files, 1):
+    size_mb = os.path.getsize(f) / (1024 * 1024)
+    print(f"  {i}. {os.path.relpath(f, pkl_dir)}  ({size_mb:.2f} MB)")
+
+# 如果目录下还有其他类型文件，也列出来看看
+print("\n--- 目录下所有文件（含非pkl）---")
+for item in sorted(os.listdir(pkl_dir)):
+    full = os.path.join(pkl_dir, item)
+    tag = "[DIR]" if os.path.isdir(full) else f"[FILE] {os.path.getsize(full)/1024/1024:.2f} MB"
+    print(f"  {item}  {tag}")
